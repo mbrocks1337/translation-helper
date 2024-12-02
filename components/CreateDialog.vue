@@ -63,7 +63,7 @@ function generateCopyableString(array: Row[]) {
 <template>
   <Button
       v-bind="$attrs"
-      class="absolute bottom-10 right-10 shadow"
+      class="!absolute bottom-10 right-10 shadow"
       icon="pi pi-plus"
       severity="success"
       @click="visible = true"
