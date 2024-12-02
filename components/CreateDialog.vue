@@ -14,11 +14,13 @@ interface Row {
   [key: string]: string
 }
 
+const toast = useToast()
 function onSubmit(e: SubmitEvent): Row {
   const formData = new FormData(e.target as HTMLFormElement)
   const dataArray = parseFormData(formData)
   const copyableString = generateCopyableString(dataArray)
   navigator.clipboard.writeText(copyableString.join(',\n').concat(','))
+  toast.add({severity: 'success', summary: 'Copied', detail: 'Copied to clipboard'})
 }
 
 function parseFormData(formData: FormData) {
@@ -55,7 +57,11 @@ function parseFormData(formData: FormData) {
 function generateCopyableString(array: Row[]) {
   return array.map((item) => {
     const {key, en, ...translations} = item;
-    const child = Object.entries(translations).map(([code, translation]) => `['code' => '${code}', 'translation' => '${translation}']`);
+    const child = Object.entries(translations).map(([code, translation]) => {
+      const id = LANGUAGES.find(lang => lang.code === code)?.id;
+
+      return `['code' => '${id}', 'translation' => '${translation}']`;
+    });
     return `['tag' => '${key}', 'standard_translation' => '${en}', 'child' => [${child.join(', ')}]]`;
   });
 }
