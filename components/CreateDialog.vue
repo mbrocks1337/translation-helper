@@ -18,7 +18,7 @@ function onSubmit(e: SubmitEvent): Row {
   const formData = new FormData(e.target as HTMLFormElement)
   const dataArray = parseFormData(formData)
   const copyableString = generateCopyableString(dataArray)
-  navigator.clipboard.writeText(copyableString.join(',\n'))
+  navigator.clipboard.writeText(copyableString.join(',\n').concat(','))
 }
 
 function parseFormData(formData: FormData) {
@@ -55,7 +55,7 @@ function parseFormData(formData: FormData) {
 function generateCopyableString(array: Row[]) {
   return array.map((item) => {
     const {key, en, ...translations} = item;
-    const child = Object.entries(translations).map(([code, translation]) => `{ 'code' => '${code}', 'translation' => '${translation}' }`);
+    const child = Object.entries(translations).map(([code, translation]) => `['code' => '${code}', 'translation' => '${translation}']`);
     return `['tag' => '${key}', 'standard_translation' => '${en}', 'child' => [${child.join(', ')}]]`;
   });
 }
